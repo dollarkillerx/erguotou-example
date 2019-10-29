@@ -6,11 +6,18 @@
  */
 package router
 
-import "github.com/dollarkillerx/erguotou"
+import (
+	"erguotou-example/web_app/api/controller"
+	"github.com/dollarkillerx/erguotou"
+)
 
 func ApiRouter(app *erguotou.Engine) {
-	app.Get("/", func(ctx *erguotou.Context) {
-		ctx.String(200,"Hello World")
-	})
+	apiV1 := app.Group("/api/v1")
+	{
+		user := apiV1.Group("/user")
+		{
+			user.Post("/register", controller.UserRegister)
+			user.Post("/login", controller.Login)
+		}
+	}
 }
-

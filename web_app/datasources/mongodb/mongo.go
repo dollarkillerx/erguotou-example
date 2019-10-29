@@ -25,5 +25,3 @@ func init() {
 	db.SetMaxOpenConn(config.MyConfig.Mongo.MaxOpen)
 	Mongo = db.Database(config.MyConfig.Mongo.Dbname)
 }
-
-
