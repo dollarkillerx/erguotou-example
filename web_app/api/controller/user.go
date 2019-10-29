@@ -12,6 +12,8 @@ import (
 	"erguotou-example/web_app/repositories"
 	"erguotou-example/web_app/resp"
 	"github.com/dollarkillerx/erguotou"
+	"github.com/dollarkillerx/erguotou/token"
+	"github.com/dollarkillerx/mongo/clog"
 )
 
 func UserRegister(ctx *erguotou.Context) {
@@ -42,5 +44,39 @@ func Login(ctx *erguotou.Context) {
 		resp.RespMsg(ctx, defs.Err400)
 		return
 	}
+	user := repositories.User{}
 
+	data, er := user.Login(inputUser)
+	if er == nil {
+		// 用户验证成功返回token
+
+		// 生成token
+		jwt := token.NewJwt()
+		jwt.Data = data
+		jwt.User = data.Name
+		jwt.Email = data.Email
+		// erguotou的jwt默认单点登录
+		s, err := token.Token.GeneraJwtToken(jwt)
+		if err != nil {
+			clog.PrintWa(err)
+			resp.RespMsg(ctx, defs.Err500Token)
+			return
+		}
+
+		resp.RespMsg(ctx, &defs.Resp{
+			HttpCode: 200,
+			Code:     200,
+			Data: defs.H{
+				"token": s,
+			},
+		})
+		return
+	} else {
+		// 用户验证失败 返回错误信息
+		resp.RespMsg(ctx, &defs.Resp{
+			HttpCode: er.HttpCode,
+			Code:     er.Code,
+			Msg:      er.Msg,
+		})
+	}
 }

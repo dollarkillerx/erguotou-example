@@ -14,6 +14,8 @@ import (
 	"github.com/dollarkillerx/easyutils"
 	"github.com/dollarkillerx/mongo/clog"
 	"github.com/dollarkillerx/mongo/mongo-driver/bson"
+	"github.com/dollarkillerx/mongo/mongo-driver/mongo"
+	"log"
 )
 
 type User struct {
@@ -24,7 +26,7 @@ func (u *User) Register(user *datamodels.User) *defs.Err {
 
 	getUser := datamodels.User{}
 	err := collection.FindOne(context.TODO(), bson.M{"email": user.Email}).Decode(&getUser)
-	if err == bson.ErrNilRegistry {
+	if err == mongo.ErrNoDocuments {
 		// 如果 查询不存在
 		user.Salt = easyutils.SuperRand()
 		user.Password = easyutils.Sha256Encode(user.Salt + user.Password)
@@ -40,6 +42,8 @@ func (u *User) Register(user *datamodels.User) *defs.Err {
 			}
 		}
 	} else {
+		log.Println(err)
+		log.Println(bson.ErrNilRegistry)
 		return &defs.Err{
 			HttpCode: 400,
 			Msg:      "用户已经存在",
@@ -47,6 +51,27 @@ func (u *User) Register(user *datamodels.User) *defs.Err {
 	}
 }
 
-func (u *User) Login(user *datamodels.User) {
+func (u *User) Login(user *datamodels.User) (*datamodels.User, *defs.Err) {
+	collection := mongodb.Mongo.Collection("user")
 
+	getUser := datamodels.User{}
+	err := collection.FindOne(context.TODO(), bson.M{"email": user.Email}).Decode(&getUser)
+	if err != nil {
+		return nil, &defs.Err{
+			HttpCode: 400,
+			Msg:      "用户名或者密码错误",
+			Code:     200,
+		}
+	}
+	pass := easyutils.Sha256Encode(getUser.Salt + user.Password)
+	if pass == getUser.Password {
+		// 如果密码正确
+		return &getUser, nil
+	} else {
+		return nil, &defs.Err{
+			HttpCode: 400,
+			Msg:      "用户名或者密码错误",
+			Code:     200,
+		}
+	}
 }
