@@ -113,10 +113,10 @@ func AESDecode(key []byte, src []byte) []byte {
 
 func TestNu2(t *testing.T) {
 	key := util.SuperRand()[:32]
-	encode,e := AESEncrypt([]byte(key), []byte("this is data"))
+	encode, e := AESEncrypt([]byte(key), []byte("this is data"))
 	if !e {
 		panic(e)
 	}
-	decode,e := AESDecrypt([]byte(key), encode)
+	decode, e := AESDecrypt([]byte(key), encode)
 	log.Println(string(decode))
 }

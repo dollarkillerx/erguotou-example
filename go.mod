@@ -4,13 +4,12 @@ go 1.12
 
 require (
 	github.com/dollarkillerx/easyutils v1.0.3
-	github.com/dollarkillerx/erguotou v0.0.26
+	github.com/dollarkillerx/erguotou v0.0.28
 	github.com/dollarkillerx/mongo v0.0.0-20191029023731-7c7313c60f8a
 	github.com/klauspost/compress v1.9.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
-	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/crypto v0.0.0-20191029031824-8986dd9e96cf // indirect
 	golang.org/x/net v0.0.0-20191028085509-fe3aa8a45271 // indirect
 	golang.org/x/sys v0.0.0-20191028164358-195ce5e7f934 // indirect

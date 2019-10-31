@@ -16,7 +16,14 @@ import (
 	"github.com/dollarkillerx/mongo/clog"
 )
 
-func UserRegister(ctx *erguotou.Context) {
+type user struct {
+}
+
+func UserController() *user {
+	return &user{}
+}
+
+func (u *user) UserRegister(ctx *erguotou.Context) {
 	inputUser := &datamodels.User{}
 	err := ctx.BindValue(inputUser)
 	if err != nil {
@@ -37,7 +44,7 @@ func UserRegister(ctx *erguotou.Context) {
 	resp.RespMsg(ctx, defs.Success200)
 }
 
-func Login(ctx *erguotou.Context) {
+func (u *user) Login(ctx *erguotou.Context) {
 	inputUser := &datamodels.User{}
 	err := ctx.BindValue(inputUser)
 	if err != nil {

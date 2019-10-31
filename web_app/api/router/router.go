@@ -16,8 +16,22 @@ func ApiRouter(app *erguotou.Engine) {
 	{
 		user := apiV1.Group("/user")
 		{
-			user.Post("/register", controller.UserRegister)
-			user.Post("/login", controller.Login)
+			// 用户注册
+			user.Post("/register", controller.UserController().UserRegister)
+			// 用户登录
+			user.Post("/login", controller.UserController().Login)
+		}
+
+		profiles := apiV1.Group("/profiles")
+		{
+			// 添加
+			profiles.Post("/add", controller.Profiles().Add)
+			// 获取所有
+			profiles.Get("/", controller.Profiles().All)
+			// 修改
+			profiles.Put("/edit", controller.Profiles().Edit)
+			// 删除
+			profiles.Delete("/delete/:id", controller.Profiles().Delete)
 		}
 	}
 }

@@ -9,10 +9,10 @@ package datamodels
 import "github.com/dollarkillerx/mongo/mongo-driver/bson/primitive"
 
 type User struct {
-	ID       primitive.ObjectID `bson:"_id"`
+	Id       primitive.ObjectID `bson:"_id" json:"id" form:"id"`
 	Name     string             `form:"name"`
-	Email    string             `form:"email" json:"email"`
-	Password string             `form:"password" json:"password"`
+	Email    string             `form:"email" json:"email" validate:"required"`
+	Password string             `form:"password" json:"password" validate:"required"`
 	Salt     string
 	Avatar   string
 	Data     int

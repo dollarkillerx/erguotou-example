@@ -14,6 +14,7 @@ import (
 	"github.com/dollarkillerx/easyutils"
 	"github.com/dollarkillerx/mongo/clog"
 	"github.com/dollarkillerx/mongo/mongo-driver/bson"
+	"github.com/dollarkillerx/mongo/mongo-driver/bson/primitive"
 	"github.com/dollarkillerx/mongo/mongo-driver/mongo"
 	"log"
 )
@@ -23,6 +24,7 @@ type User struct {
 
 func (u *User) Register(user *datamodels.User) *defs.Err {
 	collection := mongodb.Mongo.Collection("user")
+	user.Id = primitive.NewObjectID()
 
 	getUser := datamodels.User{}
 	err := collection.FindOne(context.TODO(), bson.M{"email": user.Email}).Decode(&getUser)
